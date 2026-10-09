@@ -25,15 +25,23 @@ public class UrlController
         //Depedancy Injection -- Spring sees @Service and passes the service to the controller.
 
     @PostMapping("/shorten")
-    public shortenResponse shortenURL(@RequestBody shortenRequest request)
+    public ResponseEntity<?> shortenURL(@RequestBody shortenRequest request)
     {
         String originalUrl = request.getUrl();
+
+        if(!urlService.isValidUrl((originalUrl)))
+        {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Invalid URL, please enter a valid http or https URL");
+        }
 
         String shortCode = urlService.shortenUrl(originalUrl);
 
         String shortUrl = "http://localhost:8080/" + shortCode;
 
-        return new shortenResponse(originalUrl, shortUrl);
+        return ResponseEntity.ok(
+            new shortenResponse(originalUrl, shortUrl));
     }
 
     @GetMapping("/{shortCode}")
