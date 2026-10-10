@@ -1,26 +1,33 @@
 package com.example.urlshortener.service;
 
 import org.springframework.stereotype.Service;
-import java.util.HashMap;
-import java.util.Map;
+import com.example.urlshortener.repository.UrlRepository;
+import com.example.urlshortener.model.UrlMapping;
 import java.util.UUID;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service 
 public class URLservice 
 {
-    private final Map<String, String> urls = new HashMap<>();
-    private final Map<String, String> urlToCode = new HashMap<>();
+    private final UrlRepository urlRepository;
+
+    public URLservice(UrlRepository urlRepository)
+    {
+        this.urlRepository = urlRepository;
+    }
 
     public String shortenUrl(String originalURL)
     {
         String normalisedURL = normaliseString(originalURL);
 
-        if(urlToCode.containsKey(normalisedURL))
+        Optional<UrlMapping> existing = urlRepository.findByOriginalUrl(normalisedURL);
+
+        if(existing.isPresent())
         {
-            return urlToCode.get(normalisedURL); //Checks if a code for the url already exists.
+            return existing.get().getShortCode();
         }
         
         String shortCode;
@@ -31,16 +38,23 @@ public class URLservice
                 .toString()
                 .substring(0, 6); // takes first 6 characters of UUID
         }
-        while(urls.containsKey(shortCode));
+        while(urlRepository.existsByShortCode(shortCode));
 
-        urls.put(shortCode, normalisedURL); //stores URL and shortened in hashMap
-        urlToCode.put(normalisedURL, shortCode); //stores URLs opposite format; allows checking...
+        UrlMapping mapping = new UrlMapping(shortCode, normalisedURL);
+        urlRepository.save(mapping);
         return shortCode;
     }
 
     public String getOriginalUrl(String shortCode)
     {
-        return urls.get(shortCode);
+        Optional<UrlMapping> mapping = urlRepository.findByShortCode(shortCode);
+
+        if(mapping.isPresent())
+        {
+            return mapping.get().getOriginalUrl();
+        }
+
+        return null;
     }
 
     public boolean isValidUrl(String url)
