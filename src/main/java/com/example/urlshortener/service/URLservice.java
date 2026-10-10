@@ -11,14 +11,27 @@ import java.net.URISyntaxException;
 public class URLservice 
 {
     private final Map<String, String> urls = new HashMap<>();
+    private final Map<String, String> urlToCode = new HashMap<>();
 
     public String shortenUrl(String originalURL)
     {
-        String shortCode = UUID.randomUUID() // gives long UUID code
-            .toString()
-            .substring(0, 6); // takes first 6 characters of UUID
+        if(urlToCode.containsKey(originalURL))
+        {
+            return urlToCode.get(originalURL); //Checks if a code for the url already exists.
+        }
+        
+        String shortCode;
+
+        do //Handles the case where the substring generates the same code.
+        {
+            shortCode = UUID.randomUUID() // gives long UUID code
+                .toString()
+                .substring(0, 6); // takes first 6 characters of UUID
+        }
+        while(urls.containsKey(shortCode));
 
         urls.put(shortCode, originalURL); //stores URL and shortened in hashMap
+        urlToCode.put(originalURL, shortCode); //stores URLs opposite format; allows checking...
         return shortCode;
     }
 
