@@ -1,15 +1,17 @@
 package com.example.urlshortener.controller;
 
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.urlshortener.dto.shortenRequest;
 import com.example.urlshortener.dto.shortenResponse;
 import com.example.urlshortener.service.URLservice;
+import com.example.urlshortener.dto.UrlStatsResponse;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.net.URI;
 
 
@@ -62,14 +64,14 @@ public class UrlController
     @GetMapping("/stats/{shortCode}")
     public ResponseEntity<?> getStats(@PathVariable String shortCode) 
     {
-        Long clickCount = urlService.getClickCount(shortCode);
+        UrlStatsResponse stats = urlService.getStats(shortCode);
             
-        if(clickCount == null)
+        if(stats == null)
         {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(clickCount);
+        return ResponseEntity.ok(stats);
     }
         
 }

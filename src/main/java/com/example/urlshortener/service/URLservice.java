@@ -1,8 +1,10 @@
 package com.example.urlshortener.service;
 
-import org.springframework.stereotype.Service;
 import com.example.urlshortener.repository.UrlRepository;
 import com.example.urlshortener.model.UrlMapping;
+import com.example.urlshortener.dto.UrlStatsResponse;
+
+import org.springframework.stereotype.Service;
 import java.util.UUID;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -122,6 +124,19 @@ public class URLservice
             return mapping.get().getClickCount();
         }
 
+        return null;
+    }
+
+    public UrlStatsResponse getStats(String shortCode)
+    {
+        Optional<UrlMapping> mapping = urlRepository.findByShortCode(shortCode);
+
+        if(mapping.isPresent())
+        {
+            UrlMapping urlMapping = mapping.get();
+
+            return new UrlStatsResponse(urlMapping.getShortCode(), urlMapping.getOriginalUrl(), urlMapping.getClickCount());
+        }
         return null;
     }
 }
