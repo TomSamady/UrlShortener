@@ -33,11 +33,6 @@ public class UrlMapping
         this.clickCount = 0;
     }
 
-    public void incrementClickCount()
-    {
-        clickCount++;
-    }
-
     public Long getId()
     {
         return id;

@@ -5,11 +5,13 @@ import com.example.urlshortener.model.UrlMapping;
 import com.example.urlshortener.dto.UrlStatsResponse;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Optional;
+
 
 @Service 
 public class URLservice 
@@ -47,15 +49,20 @@ public class URLservice
         return shortCode;
     }
 
+    @Transactional //Ensures database handles everything in 1 transaction
     public String getOriginalUrl(String shortCode)
     {
+        int updatedRows = urlRepository.incrementClickCount(shortCode);
+
+        if(updatedRows == 0)
+        {
+            return null;
+        }
+
         Optional<UrlMapping> mapping = urlRepository.findByShortCode(shortCode);
 
         if(mapping.isPresent())
         {
-            UrlMapping urlMapping = mapping.get();
-            urlMapping.incrementClickCount();
-            urlRepository.save(urlMapping);
             return mapping.get().getOriginalUrl();
         }
 
