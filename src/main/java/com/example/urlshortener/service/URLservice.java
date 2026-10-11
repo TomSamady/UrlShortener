@@ -100,7 +100,7 @@ public class URLservice
 
             int port = uri.getPort();
 
-            if((scheme.equals("htpp") && port == 80) || scheme.equals("https") && port == 443)
+            if((scheme.equals("http") && port == 80) || scheme.equals("https") && port == 443)
             {
                 port = -1;
             }
