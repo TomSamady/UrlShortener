@@ -51,6 +51,9 @@ public class URLservice
 
         if(mapping.isPresent())
         {
+            UrlMapping urlMapping = mapping.get();
+            urlMapping.incrementClickCount();
+            urlRepository.save(urlMapping);
             return mapping.get().getOriginalUrl();
         }
 
@@ -108,6 +111,18 @@ public class URLservice
         {
             throw new IllegalArgumentException("Invalid URL");
         }
+    }
+
+    public Long getClickCount(String shortCode)
+    {
+        Optional<UrlMapping> mapping = urlRepository.findByShortCode(shortCode);
+
+        if(mapping.isPresent())
+        {
+            return mapping.get().getClickCount();
+        }
+
+        return null;
     }
 }
     

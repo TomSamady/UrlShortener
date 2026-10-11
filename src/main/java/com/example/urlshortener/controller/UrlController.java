@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.net.URI;
 
+
 @RestController 
 public class UrlController 
 {
@@ -57,5 +58,19 @@ public class UrlController
 
             return ResponseEntity.status(302).location(URI.create(originalUrl)).build();
         }
+
+    @GetMapping("/stats/{shortCode}")
+    public ResponseEntity<?> getStats(@PathVariable String shortCode) 
+    {
+        Long clickCount = urlService.getClickCount(shortCode);
+            
+        if(clickCount == null)
+        {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(clickCount);
+    }
+        
 }
 

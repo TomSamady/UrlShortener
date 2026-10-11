@@ -18,6 +18,9 @@ public class UrlMapping
     @Column(nullable = false, unique = true, length = 2048)
     private String originalUrl;
 
+    @Column(nullable = false)
+    private long clickCount = 0;
+
     public UrlMapping()
     {
 
@@ -27,6 +30,12 @@ public class UrlMapping
     {
         this.shortCode = shortCode;
         this.originalUrl = originalUrl;
+        this.clickCount = 0;
+    }
+
+    public void incrementClickCount()
+    {
+        clickCount++;
     }
 
     public Long getId()
@@ -42,5 +51,10 @@ public class UrlMapping
     public String getOriginalUrl()
     {
         return originalUrl;
+    }
+
+    public long getClickCount()
+    {
+        return clickCount;
     }
 }
