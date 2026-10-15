@@ -20,15 +20,19 @@
 
         <p>Enter A URL below to create a short link!</p>
 
-        <input 
-            type="url" 
-            id="urlInput" 
-            placeholder="https://example.com"
-        >
+        <form id = "shortenForm">
+            <input 
+                type="url" 
+                id="urlInput" 
+                placeholder="https://example.com"
+                required
+            >
 
-        <button id="shortenButton">
-            Shorten URL
-        </button>
+            <button type="submit" id="shortenButton">
+                Shorten URL
+            </button>
+
+        </form> //allows submission with the 'Enter' key
 
         <div id="result"></div>
 

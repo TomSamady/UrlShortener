@@ -4,81 +4,104 @@ const result = document.getElementById("result");
 
 shortenButton.addEventListener("click", async function () 
 {
-    const url = urlInput.value;
+    const url = urlInput.value.trim();
 
-    const response = await fetch("/shorten", {
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-            url: url
-        })
-    });
-
-    if(response.ok)
+    if(url == "")
     {
-        const data = await response.json();
+        result.textContent = "Please enter a URL.";
+        return;
+    }
 
-        const shortCode = new URL(data.shortUrl).pathname.substring(1);
+    shortenButton.disabled = true;
+    shortenButton.textContent = "Shortening...";
+    result.textContent = "";
 
-        result.innerHTML = `
-            <p> Shortened URL: </p>
-            <a href = "${data.shortUrl}" target="_blank">
-                ${data.shortUrl}
-            </a>
+    try
+    {
+        const response = await fetch("/shorten", {
+            method: "POST",
 
-            <button id="copyButton">
-                Copy
-            </button>
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-            <div id="stats"></div>
+            body: JSON.stringify({
+                url: url
+            })
+        });
 
-            <button id="refreshStatsButton">
-                Refresh Stats
-            </button>
-        `;
-
-        const copyButton = document.getElementById("copyButton");
-        const statsDiv = document.getElementById("stats");
-        const refreshStatsButton = document.getElementById("refreshStatsButton");
-
-        copyButton.addEventListener("click", async function () 
+        if(response.ok)
         {
-            await navigator.clipboard.writeText(data.shortUrl);
-            copyButton.textContent = "Copied";
-        })
+            const data = await response.json();
 
-        async function loadStats()
-        {
-            const statsResponse = await fetch(`/stats/${shortCode}`);
+            const shortCode = new URL(data.shortUrl).pathname.substring(1);
 
-            if(statsResponse.ok)
-            {
-                const stats = await statsResponse.json();
+            result.innerHTML = 
+            `
+                <p> Shortened URL: </p>
+                <a href = "${data.shortUrl}" target="_blank">
+                    ${data.shortUrl}
+                </a>
 
-                statsDiv.innerHTML=`
-                    <p>Original URL: ${stats.originalUrl}</p>
-                    <p>Clicks: ${stats.clickCount}</p>
+                <button id="copyButton">
+                    Copy
+                </button>
+
+                <div id="stats"></div>
+
+                <button id="refreshStatsButton">
+                    Refresh Stats
+                </button>
             `;
+
+            const copyButton = document.getElementById("copyButton");
+            const statsDiv = document.getElementById("stats");
+            const refreshStatsButton = document.getElementById("refreshStatsButton");
+
+            copyButton.addEventListener("click", async function () 
+            {
+                await navigator.clipboard.writeText(data.shortUrl);
+                copyButton.textContent = "Copied";
+            })
+
+            async function loadStats()
+            {
+                const statsResponse = await fetch(`/stats/${shortCode}`);
+
+                if(statsResponse.ok)
+                {
+                    const stats = await statsResponse.json();
+
+                    statsDiv.innerHTML=`
+                        <p>Original URL: ${stats.originalUrl}</p>
+                        <p>Clicks: ${stats.clickCount}</p>
+                `;
+                }
+
             }
+            loadStats();
+
+            refreshStatsButton.addEventListener("click", function ()
+            {
+                loadStats();
+            });
+        }
+        else 
+        {
+
+            const error = await response.text();
+
+            result.textContent = error;
 
         }
-        loadStats();
-
-        refreshStatsButton.addEventListener("click", function ()
-        {
-            loadStats();
-        });
     }
-    else 
+    catch(error)
     {
-
-        const error = await response.text();
-
-        result.textContent = error;
-
+        result.textContent = "Something went wrong. Please try again."
+    }
+    finally
+    {
+        shortenButton.disabled = "false";
+        shortenButton.textContent = "Shorten URL";
     }
 });
