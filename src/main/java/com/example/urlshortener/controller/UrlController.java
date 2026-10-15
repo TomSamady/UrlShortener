@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.net.URI;
 
@@ -19,10 +20,12 @@ import java.net.URI;
 public class UrlController 
 {
     private final URLservice urlService;
+    private final String baseUrl;
 
-    public UrlController(URLservice urlService)
+    public UrlController(URLservice urlService, @Value("${app.base-url}") String baseUrl)
     {
         this.urlService = urlService;
+        this.baseUrl = baseUrl;
     }
        
         //Depedancy Injection -- Spring sees @Service and passes the service to the controller.
@@ -41,7 +44,7 @@ public class UrlController
 
         String shortCode = urlService.shortenUrl(originalUrl);
 
-        String shortUrl = "http://localhost:8080/" + shortCode;
+        String shortUrl = baseUrl + "/" + shortCode;
 
         return ResponseEntity.ok(
             new shortenResponse(originalUrl, shortUrl));
