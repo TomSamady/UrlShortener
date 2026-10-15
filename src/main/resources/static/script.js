@@ -8,7 +8,7 @@ shortenForm.addEventListener("submit", async function (event)
     event.preventDefault();
     const url = urlInput.value.trim();
 
-    if(url == "")
+    if(url === "")
     {
         result.textContent = "Please enter a URL.";
         return;
@@ -41,13 +41,15 @@ shortenForm.addEventListener("submit", async function (event)
             result.innerHTML = 
             `
                 <p> Shortened URL: </p>
-                <a href = "${data.shortUrl}" target="_blank">
-                    ${data.shortUrl}
-                </a>
+                <div class="shortUrlBox">
+                    <a href = "${data.shortUrl}" target="_blank">
+                        ${data.shortUrl}
+                    </a>
 
-                <button id="copyButton">
-                    Copy
-                </button>
+                    <button id="copyButton">
+                        Copy
+                    </button>
+                </div>
 
                 <div id="stats"></div>
 
@@ -64,6 +66,11 @@ shortenForm.addEventListener("submit", async function (event)
             {
                 await navigator.clipboard.writeText(data.shortUrl);
                 copyButton.textContent = "Copied";
+
+                setTimeout(function()
+                {
+                    copyButton.textContent = "Copy";
+                }, 2000);
             });
 
             async function loadStats()
@@ -75,8 +82,8 @@ shortenForm.addEventListener("submit", async function (event)
                     const stats = await statsResponse.json();
 
                     statsDiv.innerHTML=`
-                        <p>Original URL: ${stats.originalUrl}</p>
-                        <p>Clicks: ${stats.clickCount}</p>
+                        <p><strong>Original URL:<strong> ${stats.originalUrl}</p>
+                        <p><strong>Clicks:<strong> ${stats.clickCount}</p>
                 `;
                 }
                 else
@@ -103,7 +110,7 @@ shortenForm.addEventListener("submit", async function (event)
     }
     catch(error)
     {
-        result.textContent = "Something went wrong. Please try again."
+        result.textContent = "Something went wrong. Please try again.";
     }
     finally
     {

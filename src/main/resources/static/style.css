@@ -148,12 +148,6 @@ button:disabled
     text-decoration: underline;
 }
 
-#copyButton,
-#refreshStatsButton
-{
-    margin: 8px;
-}
-
 #stats
 {
     margin-top: 22px;
@@ -179,7 +173,67 @@ button:disabled
     word-break: break-word;
 }
 
-/* for phone diplays*/
+#stats strong
+{
+    color: white;
+}
+
+.shortUrlBox
+{
+    display: flex;
+    align-items: stretch;
+
+    background: white;
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    
+    overflow: hidden;
+
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+#result .shortUrlBox a
+{
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+
+    padding: 14px 16px;
+
+    color: #0b2342;
+
+    text-align: left;
+    text-decoration: none;
+
+    word-break: break-all;
+
+    margin: 0;
+}
+
+#result .shortUrlBox a:hover
+{
+    text-decoration: underline;
+}
+
+#copyButton
+{
+    margin: 0;
+    border-radius: 0;
+
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#refreshStatsButton
+{
+    margin: 8px;
+}
+
+
+/* for phone displays*/
 
 @media (max-width: 600px)
 {
