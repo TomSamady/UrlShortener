@@ -3,7 +3,7 @@ const shortenButton = document.getElementById("shortenButton");
 const shortenForm = document.getElementById("shortenForm");
 const result = document.getElementById("result");
 
-shortenButton.addEventListener("submit", async function (event) 
+shortenForm.addEventListener("submit", async function (event) 
 {
     event.preventDefault();
     const url = urlInput.value.trim();
@@ -64,7 +64,7 @@ shortenButton.addEventListener("submit", async function (event)
             {
                 await navigator.clipboard.writeText(data.shortUrl);
                 copyButton.textContent = "Copied";
-            })
+            });
 
             async function loadStats()
             {
@@ -78,6 +78,10 @@ shortenButton.addEventListener("submit", async function (event)
                         <p>Original URL: ${stats.originalUrl}</p>
                         <p>Clicks: ${stats.clickCount}</p>
                 `;
+                }
+                else
+                {
+                    statsDiv.textContent = "Unable to load stats.";
                 }
 
             }
@@ -103,7 +107,7 @@ shortenButton.addEventListener("submit", async function (event)
     }
     finally
     {
-        shortenButton.disabled = "false";
+        shortenButton.disabled = false;
         shortenButton.textContent = "Shorten URL";
     }
 });

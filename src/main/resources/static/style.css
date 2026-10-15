@@ -1,32 +1,205 @@
+*{
+    box-sizing: border-box;
+} 
+/*Removes default browser spacing*/
+
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
+    min-height: 100vh;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: linear-gradient(135deg, #071426, #0b2342, #123b68); /* Navy gradient background*/
+
+    color: white;
+
     display: flex;
     justify-content:center;
-    padding-top: 100px;
+    align-items: center;
+
+
+    padding: 30px;
 }
 
 .container
 {
-    width: 500px;
+    width: 100%;
+    max-width: 650px;
+
+    background: rgba(10, 25, 48, 0.88);
+
+    padding: 45px;
+
+    border-radius: 18px;
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    
     text-align: center;
 }
 
-input
+h1
 {
-    width: 70%;
-    padding: 12px;
+    margin-top: 0;
+    margin-bottom: 12px;
+
+    font-size: 40px;
+}
+
+.container > p
+{
+    margin-bottom: 30px;
+
+    color: #c9d5e5;
+
     font-size: 16px;
+}
+
+#shortenForm
+{
+    display: flex;
+    gap: 12px;
+
+    width: 100%;
+
+    margin-bottom: 25px;
+}
+
+#urlInput
+{
+    flex: 1;
+
+    padding: 15px 18px;
+
+    border: 1px solid #45658c;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+#urlInput:focus
+{
+    border-color: #6ea8fe;
+
+    box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.2);
 }
 
 button
 {
-    padding: 12px 18px;
-    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+
+    padding: 14px 20px;
+
+    background: #3d7ee8;
+
+    color:white;
+
+    font-size: 15px;
+    font-weight: 600;
+
     cursor: pointer;
+
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+button:hover
+{
+    background: #5591f0;
+
+    transform: translateY(-1px);
+}
+
+button:disabled
+{
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    transform: none;
 }
 
 #result 
 {
-    margin-top: 20px;
+    margin-top: 25px;
+
+    line-height: 1.6;
+}
+
+#result a 
+{
+    display: inline-block;
+
+    color: #8bbcff;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    margin: 5px 10px 15px 0;
+
+    word-break: break-all;
+}
+
+#result a:hover
+{
+    text-decoration: underline;
+}
+
+#copyButton,
+#refreshStatsButton
+{
+    margin: 8px;
+}
+
+#stats
+{
+    margin-top: 22px;
+    margin-bottom: 12px;
+
+    padding: 18px;
+
+    background: rgba(255, 255, 255, 0.07);
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 12px;
+
+    text-align: left;
+}
+
+#stats p
+{
+    margin: 8px 0;
+
+    color: #d6e2f0;
+
+    word-break: break-word;
+}
+
+/* for phone diplays*/
+
+@media (max-width: 600px)
+{
+    .container
+    {
+        padding: 30px 20px;
+    }
+
+    h1
+    {
+        font-size: 32px;
+    }
+
+    #shortenForm
+    {
+        flex-direction: column;
+    }
+
+    #shortenButton
+    {
+        width: 100%;
+    }
 }
