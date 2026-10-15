@@ -1,9 +1,11 @@
 const urlInput = document.getElementById("urlInput");
 const shortenButton = document.getElementById("shortenButton");
+const shortenForm = document.getElementById("shortenForm");
 const result = document.getElementById("result");
 
-shortenButton.addEventListener("click", async function () 
+shortenButton.addEventListener("submit", async function (event) 
 {
+    event.preventDefault();
     const url = urlInput.value.trim();
 
     if(url == "")
